@@ -13,7 +13,6 @@ router.get('/:groupId', (req, res, next) => {
     .exec()
     .then(docs => {
          const response = {
-             count: docs.length,
              customers: docs
          };
          res.status(200).json(response);
@@ -36,8 +35,7 @@ router.post('/createmember', (req, res, next) => {
    .save()
    .then(result => {
     res.status(200).json({
-        
-
+        message:"member created susccesfully"
     });
        console.log(result);  
    })

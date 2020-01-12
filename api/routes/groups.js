@@ -8,10 +8,10 @@ const check_auth = require('../middleware/check-auth');
 
 router.get('/', (req, res, next) => {
     group.find()
+    .select()
     .exec()
     .then(docs => {
          const response = {
-             count: docs.length,
              customers: docs
          };
          res.status(200).json(response);
