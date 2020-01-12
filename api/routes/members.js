@@ -1,50 +1,15 @@
+const MembersController = require('../controllers/members');
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-const customer = require('../models/customerDetails');
 const check_auth = require('../middleware/check-auth'); 
 
 
-router.get('/:groupId', (req, res, next) => {
-    const id = req.params.groupId;
-    customer.find({group: id})
-    .select('name group phoneNumber')
-    .exec()
-    .then(docs => {
-         const response = {
-             customers: docs
-         };
-         res.status(200).json(response);
-    })
-    .catch(err=>{
-        res.status(500).json({
-            error: err
-        })
-    });
-});
+router.get('/:groupId',MembersController.get_members_with_id );
 
-router.post('/createmember', (req, res, next) => {
-    const customerDetails= new customer({
-       _id: new mongoose.Types.ObjectId(),
-       name: req.body.name,
-       group: req.body.group,
-       phoneNumber: req.body.phoneNumber
-   });
-   customerDetails
-   .save()
-   .then(result => {
-    res.status(200).json({
-        message:"member created susccesfully"
-    });
-       console.log(result);  
-   })
-   .catch(err=> {
-       res.status(500).json({
-          error: err
-       });
-       console.log(err)
-   });
-});
+router.post('/createmember',MembersController.post_members_createmember);
+
+router.delete('/:_id',MembersController.delete_members_with_id);
+
+router.post('/edit/:name',MembersController.post_members_edit_name);
 
 module.exports = router;

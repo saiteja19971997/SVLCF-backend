@@ -1,52 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-const group = require('../models/groupDetails');
+const GroupController = require('../controllers/groups');
 const check_auth = require('../middleware/check-auth'); 
 
 
-router.get('/', (req, res, next) => {
-    group.find()
-    .select()
-    .exec()
-    .then(docs => {
-         const response = {
-             customers: docs
-         };
-         res.status(200).json(response);
-    })
-    .catch(err=>{
-        res.status(500).json({
-            error: err
-        })
-    });
-});
+router.get('/',GroupController.get_groups_all);
 
-router.post('/creategroup', (req, res, next) => {
-    const groupDetails= new group({
-       _id: new mongoose.Types.ObjectId(),
-       name: req.body.name,
-       Start_date: req.body.Start_date,
-       End_date: req.body.End_date,
-       chit_value: req.body.chit_value,
-       Installment_amount: req.body.Installment_amount,
-       Action_time: req.body.Action_time
-   });
-   groupDetails
-   .save()
-   .then(result => {
-    res.status(200).json({
-         message: "saved"
-    });
-       console.log(result);  
-   })
-   .catch(err=> {
-       res.status(500).json({
-          error: err
-       });
-       console.log(err)
-   });
-});
+router.post('/creategroup',GroupController.post_group_create);
+
+router.delete('/:_id',GroupController.delete_group_with_id);
+
+router.post('/edit/:name',GroupController.post_group_edit_id);
 
 module.exports = router;
