@@ -43,13 +43,20 @@ exports.post_members_createmember= (req, res, next) => {
 }
 
 exports.delete_members_with_id = (req,res,next)=>{
-    const id = req.params._id;
+    const id = req.body._id;
+    const group = req.body.group;
     customer.remove({_id : id})
     .exec()
     .then(result =>{
-        res.status(200).json({
-            message: "deleted successfully"
-        });
+        customer.find({group: group})
+        .select('_id name group phoneNumber')
+        .exec()
+        .then(docs => {
+             const response = {
+                 customers: docs
+             };
+             res.status(200).json(response);
+        })
     })
     .catch(err => {
         res.status(500).json({

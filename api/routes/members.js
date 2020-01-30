@@ -8,7 +8,7 @@ router.get('/:groupId',MembersController.get_members_with_id );
 
 router.post('/createmember',MembersController.post_members_createmember);
 
-router.delete('/:_id',MembersController.delete_members_with_id);
+router.post('/',MembersController.delete_members_with_id);
 
 router.post('/edit/:name',MembersController.post_members_edit_name);
 

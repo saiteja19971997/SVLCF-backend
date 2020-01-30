@@ -18,6 +18,23 @@ exports.get_groups_all =  (req, res, next) => {
     });
 }
 
+exports.get_groups_Id =  (req, res, next) => {
+    group.find()
+    .select("name")
+    .exec()
+    .then(docs => {
+         const response = {
+             customers: docs
+         };
+         res.status(200).json(response);
+    })
+    .catch(err=>{
+        res.status(500).json({
+            error: err
+        })
+    });
+}
+
 exports.post_group_create =  (req, res, next) => {
     const groupDetails= new group({
        _id: new mongoose.Types.ObjectId(),
