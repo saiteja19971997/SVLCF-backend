@@ -66,18 +66,25 @@ exports.delete_members_with_id = (req,res,next)=>{
    
 }
 exports.post_members_edit_name = (req,res,next)=>{
-    const name = req.params.name;
+    const id = req.body._id;
+    const group = req.body.group;
     const customerDetails= new customer({
         name: req.body.name,
         group: req.body.group,
         phoneNumber: req.body.phoneNumber
     });
-    customer.updateOne({name: name},customerDetails)
+    customer.updateOne({_id: id},customerDetails)
         .exec()
         .then(result =>{
-            res.status(200).json({
-                message:"sucessfully edited"
-            });
+            customer.find({group: group})
+    .select('name group phoneNumber')
+    .exec()
+    .then(docs => {
+         const response = {
+             customers: docs
+         };
+         res.status(200).json(response);
+    })
         })
         .catch(err => {
             res.status(500).json({

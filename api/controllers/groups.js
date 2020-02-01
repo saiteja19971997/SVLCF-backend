@@ -62,23 +62,35 @@ exports.post_group_create =  (req, res, next) => {
 }
 
 exports.delete_group_with_id = (req,res,next)=>{
-    const id = req.params._id;
+    const id = req.body._id;
     group.remove({_id : id})
     .exec()
     .then(result =>{
-        res.status(200).json({
-            message: "deleted successfully"
-        });
+        group.find()
+    .select()
+    .exec()
+    .then(docs => {
+         const response = {
+             customers: docs
+         };
+         res.status(200).json(response);
+    })
+    .catch(err=>{
+        res.status(500).json({
+            error: err
+        })
+    });
     })
     .catch(err => {
         res.status(500).json({
             error: err
         });
     });
+
    
 }
 exports.post_group_edit_id = (req,res,next)=>{
-    const name = req.params.name;
+    const id = req.body._id;
     const groupDetails= new group({
         name: req.body.name,
        Start_date: req.body.Start_date,
@@ -87,12 +99,18 @@ exports.post_group_edit_id = (req,res,next)=>{
        Installment_amount: req.body.Installment_amount,
        Action_time: req.body.Action_time
     });
-    group.updateOne({name: name},groupDetails)
+    group.updateOne({_id: id},groupDetails)
         .exec()
         .then(result =>{
-            res.status(200).json({
-                message:"sucessfully edited"
-            });
+            group.find()
+            .select()
+            .exec()
+            .then(docs => {
+                 const response = {
+                     customers: docs
+                 };
+                 res.status(200).json(response);
+            })
         })
         .catch(err => {
             res.status(500).json({

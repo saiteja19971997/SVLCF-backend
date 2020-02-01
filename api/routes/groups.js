@@ -8,9 +8,9 @@ router.get('/',GroupController.get_groups_all);
 
 router.post('/creategroup',GroupController.post_group_create);
 
-router.delete('/:_id',GroupController.delete_group_with_id);
+router.post('/',GroupController.delete_group_with_id);
 
-router.post('/edit/:name',GroupController.post_group_edit_id);
+router.post('/edit',GroupController.post_group_edit_id);
 
 router.get('/groupIds',GroupController.get_groups_Id);
 
